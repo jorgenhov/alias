@@ -15,6 +15,6 @@ const request = (options) => {
 
 export function getAlias(params) {
   return request({
-    url: BASE_API_URL + "amount=10",
+    url: BASE_API_URL + "amount=48",
   });
 }

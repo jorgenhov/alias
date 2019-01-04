@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import '../App.css';
 import {getAlias} from './util/APIUtil';
+import Game from './view/game/Game.js';
+import Header from './view/Header.js'
+
+import Grid from '@material-ui/core/Grid';
 
 class App extends Component {
   constructor(props){
@@ -20,17 +24,48 @@ class App extends Component {
   getAlias() {
     getAlias()
     .then(response => {
+      let resp = response.results
+      let completeResp = []
+      resp.map((respon => {
+        let addThis = {"answered": false}
+        let addPoints = {"points": 100}
+        if(respon.difficulty === "hard"){
+          addPoints = {"points": 300}
+        }else if (respon.difficulty === "medium") {
+          addPoints = {"points": 200}
+        }else {
+          addPoints = {"points": 100}
+        }
+        Object.assign(respon, addThis)
+        Object.assign(respon, addPoints)
+        completeResp.push(respon)
+        return completeResp
+      }))
       this.setState({
-        questions: response.results
+        questions: completeResp
       })
-      console.log(response.results);
     })
   }
 
   render() {
-    let numb = this.state.questions.length;
+    let questi = this.state.questions;
+
+    console.log(questi);
+
     return (
-      <div>{numb}</div>
+      <div>
+        <Header/>
+        <Grid container>
+          <Grid item xs={6}>
+            <Game
+              questions={questi}
+            />
+          </Grid>
+          <Grid item xs={6}>
+          hei
+          </Grid>
+        </Grid>
+      </div>
     );
   }
 }
